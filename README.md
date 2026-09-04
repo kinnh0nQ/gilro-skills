@@ -20,7 +20,7 @@ npx skills add https://github.com/kinnh0nQ/gilro-skills --skill gilroro-instagra
 ## 요구 사항
 
 - Figma MCP 연결 (Figma 편집 권한이 있는 계정)
-- 가이드 파일 접근 권한 — 길로 디자인 스킬 파일 `H1sxiDe60R9b28jykK4cew` (팀 공용).
+- 가이드 파일 접근 권한 — 길로 디자인 스킬 파일 (팀 공용).
   커버·피드·엔딩 템플릿이 여기 있고, 스킬이 이걸 복제해서 카드를 만듭니다.
 
 ## 라이선스
