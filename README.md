@@ -20,7 +20,8 @@ npx skills add https://github.com/kinnh0nQ/gilro-skills --skill gilroro-instagra
 ## 요구 사항
 
 - Figma MCP 연결 (Figma 편집 권한이 있는 계정)
-- 가이드라인 파일 접근 권한 — `SKILL.md` 상단의 파일 키를 팀에서 쓰는 가이드 파일 키로 바꿔서 사용하세요.
+- 커버·피드는 별도 가이드 파일 없이 만들어집니다.
+- 마지막장(엔딩)만 길로로 프로필이 이미지라서, 작업할 Figma 파일 안에 기존 엔딩 프레임(1080×1350)이 하나 있어야 복제해서 씁니다.
 
 ## 라이선스
 
