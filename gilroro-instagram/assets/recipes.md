@@ -1,6 +1,7 @@
 # 코드 레시피
 
-`use_figma`로 실행하는 스니펫. 커버·피드는 파일에 의존하지 않고, 엔딩만 기존 프레임을 복제한다.
+`use_figma`로 실행하는 스니펫. 가이드 파일 `H1sxiDe60R9b28jykK4cew`의 템플릿을 복제하는 것이 기본이고,
+아래 생성 코드는 같은 결과를 직접 만들 때 쓴다.
 
 ## 폰트 먼저 로드
 
@@ -143,20 +144,51 @@ band.y = 371;
 band.fills = [{type:'IMAGE', scaleMode:'FILL', imageHash: HASH}];
 ```
 
-## 마지막장 (엔딩)
-
-프로필이 이미지 에셋이라 **기존 엔딩 프레임을 복제**한다. 같은 파일에서 찾는다.
+## 가이드 템플릿 복제 (같은 파일에서 작업할 때)
 
 ```js
-const src = figma.currentPage.findOne(function(n){
-  return n.type === 'FRAME' && Math.round(n.width) === 1080
-      && Math.round(n.height) === 1350 && /엔딩|_08|_09/.test(n.name);
-});
-if (!src) throw new Error('엔딩 프레임을 찾지 못했다 — 파일에 올려달라고 요청할 것');
-const last = src.clone();
+const T = { cover2:'1:9', cover1:'1:16', feed:'1:24', ending:'1:40' };
+const src = await figma.getNodeByIdAsync(T.feed);
+const card = src.clone();
+figma.currentPage.appendChild(card);
+card.x = X; card.y = Y;
+// 텍스트는 폰트를 먼저 갈아끼운 뒤 대입 (아래 폰트 함정 참고)
+```
+
+## 마지막장 (엔딩)
+
+프로필이 이미지 에셋이라 **`1:40`(까마귀 ver)을 복제**한다.
+
+```js
+const last = (await figma.getNodeByIdAsync('1:40')).clone();
+figma.currentPage.appendChild(last);
+last.x = X; last.y = Y;
 
 // 배경은 반드시 이번 회차 앞장 이미지로 교체하고 오파시티만 조절한다.
-// 리드/프로필/푸터는 고정이므로 건드리지 않는다.
+const bg = last.findOne(n => n.fills && n.fills[0] && n.fills[0].type === 'IMAGE');
+if (bg) bg.fills = [{type:'IMAGE', scaleMode:'FILL', imageHash: 앞장_HASH}];
+// 리드/프로필/푸터 문구는 고정이므로 건드리지 않는다.
+```
+
+## 새 사진 올리기
+
+파일에 없는 사진은 `upload_assets`로 넣는다 (`createImageAsync`는 쓰지 않는다).
+
+```js
+// 1) 사진용 사각형을 먼저 만들고 ID를 모은다
+const targets = cards.map(function(card){
+  const r = figma.createRectangle();
+  r.resize(1080, 1350);
+  card.insertChild(0, r);
+  return r.id;
+});
+return {targets};
+```
+
+```
+// 2) upload_assets(fileKey, count: N, nodeIds: targets, scaleMode: 'FILL')
+// 3) 반환된 URL마다 순서대로 POST
+curl -X POST --data-binary @photo1.jpg -H 'Content-Type: image/jpeg' '<URL 1>'
 ```
 
 ## 검증
